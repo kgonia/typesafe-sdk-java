@@ -34,6 +34,8 @@ public class Demo {
                     "Hi, I see two charges of $49 on my card for August. I only have one account. "
                             + "Please fix this ASAP, I'm pretty frustrated.");
 
+            System.out.println("Ticket: " + ticket.subject + "\n" + ticket.body);
+
             SystemOneResponse response = client.systemOne(ticket, Map.of(
                     "isBilling", Question.noul("Is this ticket about billing?"),
                     "sentiment", Question.choice("What is the customer's tone?", "calm", "frustrated", "angry"),
