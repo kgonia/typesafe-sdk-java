@@ -4,6 +4,7 @@
 
 Initial release.
 
+- Multi-module build: `typesafe-sdk` (published), `examples`, and `test-jpms` (a module-path consumer test).
 - Packages by concern: `ai.typesafe.sdk` (client), `systemone`, `models`, `http`, `errors`, and unexported `internal`.
 - `TypeSafeClient` and `Models` interfaces with synchronous and `CompletableFuture` variants of `systemOne` and `models().list()`.
 - Sealed `Question` (`Noul`, `Choice`, `Score`, `Raw`) and sealed `Answer` (`Noul`, `Choice`, `Score`, `Unknown`).
@@ -12,4 +13,5 @@ Initial release.
 - Per-attempt timeouts, cancellation, and interrupt handling.
 - Status-specific exceptions with request IDs and parsed error bodies.
 - Logging through `System.Logger` with credential redaction.
+- Actionable error when a modular application passes a record from a package not opened to the SDK.
 - No runtime dependencies: JDK `HttpClient` and a built-in JSON codec.

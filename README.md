@@ -224,10 +224,19 @@ mvn -q package -DskipTests
 TYPESAFE_API_KEY=... java -cp target/classes examples/Demo.java
 ```
 
-## Code layout
+## Repository layout
 
-The root package holds only the entry point. Each API feature has its own package, HTTP-level settings are
-shared in one place, and everything under `internal` is implementation that the module does not export.
+```
+typesafe-sdk-java/
+├── pom.xml          parent: shared plugin versions and Java 21 floor
+├── typesafe-sdk/    the library; the only published artifact (ai.typesafe:typesafe-sdk)
+├── examples/        runnable samples, built with the SDK, never published
+└── test-jpms/       a modular consumer that verifies the SDK on the module path
+```
+
+Inside the library, the root package holds only the entry point. Each API feature has its own package, HTTP-level
+settings are shared in one place, and everything under `internal` is implementation that the module does not
+export.
 
 | Package                     | Contents                                                              |
 |-----------------------------|-----------------------------------------------------------------------|
@@ -242,11 +251,31 @@ shared in one place, and everything under `internal` is implementation that the 
 and answer kinds are nested in their sealed parents: `Question.Noul`, `Question.Choice`, `Question.Score`,
 `Question.Raw`, and `Answer.Noul`, `Answer.Choice`, `Answer.Score`, `Answer.Unknown`.
 
+## Modular applications
+
+The SDK is a named module, `ai.typesafe.sdk`. Add `requires ai.typesafe.sdk;` to your `module-info.java`. If you
+pass records as `state`, the SDK reads their components reflectively, so open their package to it:
+
+```java
+opens com.example.tickets to ai.typesafe.sdk;
+```
+
+Without that, the SDK raises a `TypeSafeException` naming the package to open. Passing a `Map` needs no opens.
+
+## Example
+
+`examples/` holds a complete program. Install the SDK locally once, then run it:
+
+```sh
+mvn -q install -DskipTests
+TYPESAFE_API_KEY=... mvn -q -pl examples exec:java
+```
+
 ## Development
 
 ```sh
-mvn verify                       # tests, Javadoc, sources jar, zero-dependency check
-TYPESAFE_API_KEY=... mvn test    # also runs the live integration test
+mvn verify                       # unit tests, module-path tests, Javadoc, sources jar, zero-dependency check
+TYPESAFE_API_KEY=... mvn verify  # also runs the live integration test
 ```
 
 ## License

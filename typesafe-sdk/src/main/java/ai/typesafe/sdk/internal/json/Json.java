@@ -33,8 +33,9 @@ import java.util.UUID;
  * name), and {@link Temporal}, {@link TemporalAmount}, {@link UUID}, and {@link URI} (written as strings).
  * Any other type raises {@link JsonException}. {@code NaN} and infinite numbers are rejected.
  *
- * <p>Record support reads record components reflectively. On GraalVM native image, register such records for
- * reflection or pass a {@link Map} instead.
+ * <p>Record support reads record components reflectively. A modular application must open the record's package
+ * to this module ({@code opens my.pkg to ai.typesafe.sdk;}) or pass a {@link Map} instead. On GraalVM native
+ * image, register such records for reflection.
  */
 public final class Json {
 
@@ -218,9 +219,23 @@ public final class Json {
             throw new JsonException("Accessor " + record.getClass().getName() + "." + component.getName()
                     + "() threw an exception.", e.getCause());
         } catch (IllegalAccessException | RuntimeException e) {
-            throw new JsonException("Cannot read record component " + record.getClass().getName() + "."
-                    + component.getName() + "(). Make the record public or pass a Map instead.", e);
+            throw new JsonException(accessHint(record.getClass(), component), e);
         }
+    }
+
+    /** Explains why a record component could not be read, with the module-system fix when that is the cause. */
+    private static String accessHint(Class<?> type, RecordComponent component) {
+        String base = "Cannot read record component " + type.getName() + "." + component.getName() + "().";
+        Module module = type.getModule();
+        String pkg = type.getPackageName();
+        Module self = Json.class.getModule();
+        if (module.isNamed() && !module.isOpen(pkg, self)) {
+            String target = self.isNamed() ? self.getName() : "ALL-UNNAMED";
+            return base + " The record is in module " + module.getName() + ", which does not open package " + pkg
+                    + " to " + target + ". Add \"opens " + pkg + " to " + target + ";\" to its module-info.java,"
+                    + " or pass a Map instead.";
+        }
+        return base + " Make the record public or pass a Map instead.";
     }
 
     private static void writeString(CharSequence s, StringBuilder out) {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ai.typesafe</groupId>
+        <artifactId>typesafe-sdk-parent</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>typesafe-sdk-test-jpms</artifactId>
+    <name>TypeSafe Java SDK module-path test</name>
+    <description>Consumes the SDK as a named module on the module path, as a modular application would. Never published.</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>ai.typesafe</groupId>
+            <artifactId>typesafe-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <!-- Tests here run on the module path: the compiler and surefire defaults apply. -->
+</project>

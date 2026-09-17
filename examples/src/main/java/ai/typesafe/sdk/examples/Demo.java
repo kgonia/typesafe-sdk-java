@@ -1,3 +1,5 @@
+package ai.typesafe.sdk.examples;
+
 import ai.typesafe.sdk.LogLevel;
 import ai.typesafe.sdk.TypeSafeClient;
 import ai.typesafe.sdk.errors.TypeSafeApiException;
@@ -13,8 +15,8 @@ import java.util.Map;
  * A complete example. Needs TYPESAFE_API_KEY in the environment.
  *
  * <pre>
- * mvn -q package -DskipTests
- * java -cp target/classes examples/Demo.java
+ * mvn -q install -DskipTests
+ * mvn -q -pl examples exec:java
  * </pre>
  */
 public class Demo {
