@@ -5,7 +5,7 @@
 Initial release.
 
 - Multi-module build: `typesafe-sdk` (published), `examples`, and `test-jpms` (a module-path consumer test).
-- Packages by concern: `ai.typesafe.sdk` (client), `systemone`, `models`, `http`, `errors`, and unexported `internal`.
+- Packages by concern: `io.github.kgonia.typesafe` (client), `systemone`, `models`, `http`, `errors`, and unexported `internal`.
 - `TypeSafeClient` and `Models` interfaces with synchronous and `CompletableFuture` variants of `systemOne` and `models().list()`.
 - Sealed `Question` (`Noul`, `Choice`, `Score`, `Raw`) and sealed `Answer` (`Noul`, `Choice`, `Score`, `Unknown`).
 - Configuration from the builder, `TYPESAFE_*` environment variables, and defaults.

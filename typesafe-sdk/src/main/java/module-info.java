@@ -1,16 +1,16 @@
 /**
  * Zero-dependency Java client for the TypeSafe AI System One API.
  *
- * <p>Exported packages: {@code ai.typesafe.sdk} (client), {@code ai.typesafe.sdk.systemone} and
- * {@code ai.typesafe.sdk.models} (endpoints), {@code ai.typesafe.sdk.http} (transport settings), and
- * {@code ai.typesafe.sdk.errors}. Everything under {@code ai.typesafe.sdk.internal} is implementation.
+ * <p>Exported packages: {@code io.github.kgonia.typesafe} (client), {@code io.github.kgonia.typesafe.systemone} and
+ * {@code io.github.kgonia.typesafe.models} (endpoints), {@code io.github.kgonia.typesafe.http} (transport settings), and
+ * {@code io.github.kgonia.typesafe.errors}. Everything under {@code io.github.kgonia.typesafe.internal} is implementation.
  */
-module ai.typesafe.sdk {
+module io.github.kgonia.typesafe {
     requires transitive java.net.http;
 
-    exports ai.typesafe.sdk;
-    exports ai.typesafe.sdk.systemone;
-    exports ai.typesafe.sdk.models;
-    exports ai.typesafe.sdk.http;
-    exports ai.typesafe.sdk.errors;
+    exports io.github.kgonia.typesafe;
+    exports io.github.kgonia.typesafe.systemone;
+    exports io.github.kgonia.typesafe.models;
+    exports io.github.kgonia.typesafe.http;
+    exports io.github.kgonia.typesafe.errors;
 }
