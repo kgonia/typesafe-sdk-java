@@ -200,8 +200,15 @@
                         <extensions>true</extensions>
                         <configuration>
                             <publishingServerId>central</publishingServerId>
+                            <deploymentName>typesafe-sdk ${project.version}</deploymentName>
                             <!-- Validate and stage; press Publish in the portal for the final step. -->
                             <autoPublish>false</autoPublish>
+                            <!-- The upload happens once, from the last reactor module, so modules are excluded
+                                 here rather than skipped individually. -->
+                            <excludeArtifacts>
+                                <artifactId>typesafe-sdk-examples</artifactId>
+                                <artifactId>typesafe-sdk-test-jpms</artifactId>
+                            </excludeArtifacts>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -15,9 +15,9 @@
     <description>Consumes the SDK as a named module on the module path, as a modular application would. Never published.</description>
 
     <properties>
-        <!-- Built and tested with the SDK, never published. -->
+        <!-- Built and tested with the SDK, never published; excluded from the Central bundle in the parent. -->
         <maven.deploy.skip>true</maven.deploy.skip>
-        <skipPublishing>true</skipPublishing>
+        <gpg.skip>true</gpg.skip>
     </properties>
 
     <dependencies>
