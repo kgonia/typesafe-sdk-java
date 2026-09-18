@@ -4,21 +4,44 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ai.typesafe</groupId>
+    <groupId>io.github.kgonia</groupId>
     <artifactId>typesafe-sdk-parent</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <name>TypeSafe Java SDK (parent)</name>
     <description>Build parent for the TypeSafe Java SDK. Only the typesafe-sdk module is published.</description>
-    <url>https://docs.typesafe.ai/</url>
+    <url>https://github.com/kgonia/typesafe-sdk-java</url>
+    <inceptionYear>2026</inceptionYear>
 
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>https://opensource.org/licenses/MIT</url>
+            <url>https://github.com/kgonia/typesafe-sdk-java/blob/main/LICENSE</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <id>kgonia</id>
+            <name>Krzysztof Gonia</name>
+            <email>krzysztof.gonia@gmail.com</email>
+            <url>https://github.com/kgonia</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/kgonia/typesafe-sdk-java.git</connection>
+        <developerConnection>scm:git:git@github.com:kgonia/typesafe-sdk-java.git</developerConnection>
+        <url>https://github.com/kgonia/typesafe-sdk-java</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/kgonia/typesafe-sdk-java/issues</url>
+    </issueManagement>
 
     <modules>
         <module>typesafe-sdk</module>
@@ -31,14 +54,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <junit.version>5.11.4</junit.version>
-        <!-- Only typesafe-sdk overrides this to publish. -->
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <!-- Reproducible builds: bump on each release. -->
+        <project.build.outputTimestamp>2026-09-18T00:00:00Z</project.build.outputTimestamp>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>ai.typesafe</groupId>
+                <groupId>io.github.kgonia</groupId>
                 <artifactId>typesafe-sdk</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -115,6 +138,16 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>3.1.3</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>3.2.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.7.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -136,4 +169,43 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- mvn -P release deploy: signs the artifacts and uploads them to the Maven Central portal.
+             Needs a <server id="central"> with a portal token in ~/.m2/settings.xml and a GPG key. -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals><goal>sign</goal></goals>
+                                <configuration>
+                                    <gpgArguments>
+                                        <arg>--pinentry-mode</arg>
+                                        <arg>loopback</arg>
+                                    </gpgArguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <!-- Validate and stage; press Publish in the portal for the final step. -->
+                            <autoPublish>false</autoPublish>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

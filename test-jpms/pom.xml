@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ai.typesafe</groupId>
+        <groupId>io.github.kgonia</groupId>
         <artifactId>typesafe-sdk-parent</artifactId>
         <version>0.1.0</version>
     </parent>
@@ -14,9 +14,15 @@
     <name>TypeSafe Java SDK module-path test</name>
     <description>Consumes the SDK as a named module on the module path, as a modular application would. Never published.</description>
 
+    <properties>
+        <!-- Built and tested with the SDK, never published. -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <skipPublishing>true</skipPublishing>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>ai.typesafe</groupId>
+            <groupId>io.github.kgonia</groupId>
             <artifactId>typesafe-sdk</artifactId>
         </dependency>
         <dependency>

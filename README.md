@@ -12,7 +12,7 @@ Add the dependency:
 
 ```xml
 <dependency>
-    <groupId>ai.typesafe</groupId>
+    <groupId>io.github.kgonia</groupId>
     <artifactId>typesafe-sdk</artifactId>
     <version>0.1.0</version>
 </dependency>
@@ -21,8 +21,8 @@ Add the dependency:
 Set `TYPESAFE_API_KEY` in your environment (create a key in the [console](https://console.typesafe.ai/)), then:
 
 ```java
-import ai.typesafe.sdk.TypeSafeClient;
-import ai.typesafe.sdk.systemone.*;
+import io.github.kgonia.typesafe.TypeSafeClient;
+import io.github.kgonia.typesafe.systemone.*;
 import java.util.Map;
 
 try (TypeSafeClient client = TypeSafeClient.create()) {
@@ -138,7 +138,7 @@ The synchronous methods block on the same machinery and park cleanly on virtual 
 All exceptions are unchecked and extend `TypeSafeException`.
 
 ```java
-import ai.typesafe.sdk.errors.*;
+import io.github.kgonia.typesafe.errors.*;
 
 try {
     client.systemOne(state, questions);
@@ -196,7 +196,7 @@ result even when you request an alias.
 
 ## Logging
 
-The SDK logs through `System.getLogger("ai.typesafe.sdk")`, which reaches `java.util.logging` by default and SLF4J
+The SDK logs through `System.getLogger("io.github.kgonia.typesafe")`, which reaches `java.util.logging` by default and SLF4J
 or Log4j when they provide a `System.LoggerFinder`. `info` logs one line per attempt; `debug` adds headers and
 bodies. Credential headers are redacted from log output. Request and response bodies are not.
 
@@ -229,7 +229,7 @@ TYPESAFE_API_KEY=... java -cp target/classes examples/Demo.java
 ```
 typesafe-sdk-java/
 ├── pom.xml          parent: shared plugin versions and Java 21 floor
-├── typesafe-sdk/    the library; the only published artifact (ai.typesafe:typesafe-sdk)
+├── typesafe-sdk/    the library; the only published artifact (io.github.kgonia:typesafe-sdk)
 ├── examples/        runnable samples, built with the SDK, never published
 └── test-jpms/       a modular consumer that verifies the SDK on the module path
 ```
@@ -240,12 +240,12 @@ export.
 
 | Package                     | Contents                                                              |
 |-----------------------------|-----------------------------------------------------------------------|
-| `ai.typesafe.sdk`           | `TypeSafeClient` (interface and builder), `LogLevel`. Start here.     |
-| `ai.typesafe.sdk.systemone` | `Question`, `Answer`, `SystemOneRequest`, `SystemOneResponse`, `Usage` |
-| `ai.typesafe.sdk.models`    | `Models` (interface), `ModelMetadata`, `ListModelsResponse`           |
-| `ai.typesafe.sdk.http`      | `RequestOptions`, `RetryPolicy`, `ResponseMetadata`                   |
-| `ai.typesafe.sdk.errors`    | `TypeSafeException` and its subclasses                                |
-| `ai.typesafe.sdk.internal`  | Client and resource implementations, transport, codec. Not exported.  |
+| `io.github.kgonia.typesafe`           | `TypeSafeClient` (interface and builder), `LogLevel`. Start here.     |
+| `io.github.kgonia.typesafe.systemone` | `Question`, `Answer`, `SystemOneRequest`, `SystemOneResponse`, `Usage` |
+| `io.github.kgonia.typesafe.models`    | `Models` (interface), `ModelMetadata`, `ListModelsResponse`           |
+| `io.github.kgonia.typesafe.http`      | `RequestOptions`, `RetryPolicy`, `ResponseMetadata`                   |
+| `io.github.kgonia.typesafe.errors`    | `TypeSafeException` and its subclasses                                |
+| `io.github.kgonia.typesafe.internal`  | Client and resource implementations, transport, codec. Not exported.  |
 
 `TypeSafeClient` and `Models` are interfaces, so code that depends on them can be tested with a mock. Question
 and answer kinds are nested in their sealed parents: `Question.Noul`, `Question.Choice`, `Question.Score`,
@@ -253,11 +253,11 @@ and answer kinds are nested in their sealed parents: `Question.Noul`, `Question.
 
 ## Modular applications
 
-The SDK is a named module, `ai.typesafe.sdk`. Add `requires ai.typesafe.sdk;` to your `module-info.java`. If you
+The SDK is a named module, `io.github.kgonia.typesafe`. Add `requires io.github.kgonia.typesafe;` to your `module-info.java`. If you
 pass records as `state`, the SDK reads their components reflectively, so open their package to it:
 
 ```java
-opens com.example.tickets to ai.typesafe.sdk;
+opens com.example.tickets to io.github.kgonia.typesafe;
 ```
 
 Without that, the SDK raises a `TypeSafeException` naming the package to open. Passing a `Map` needs no opens.
@@ -277,6 +277,19 @@ TYPESAFE_API_KEY=... mvn -q -pl examples exec:java
 mvn verify                       # unit tests, module-path tests, Javadoc, sources jar, zero-dependency check
 TYPESAFE_API_KEY=... mvn verify  # also runs the live integration test
 ```
+
+## Releasing
+
+One-time setup: create an account at [central.sonatype.com](https://central.sonatype.com), verify the
+`io.github.kgonia` namespace, generate a user token, and put it in `~/.m2/settings.xml` as
+`<server><id>central</id>...</server>`. Generate a GPG key and publish it to a keyserver.
+
+```sh
+mvn -P release deploy
+```
+
+This signs and uploads the library and its parent pom, then waits for you to press Publish in the portal.
+Bump `project.build.outputTimestamp` in the parent pom for each release so builds stay reproducible.
 
 ## License
 

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ai.typesafe</groupId>
+        <groupId>io.github.kgonia</groupId>
         <artifactId>typesafe-sdk-parent</artifactId>
         <version>0.1.0</version>
     </parent>
@@ -15,11 +15,7 @@
 
     <name>TypeSafe Java SDK</name>
     <description>Zero-dependency Java client for the TypeSafe AI System One API.</description>
-    <url>https://docs.typesafe.ai/</url>
-
-    <properties>
-        <maven.deploy.skip>false</maven.deploy.skip>
-    </properties>
+    <url>https://github.com/kgonia/typesafe-sdk-java</url>
 
     <!-- No runtime dependencies; enforced below. -->
     <dependencies>
@@ -86,7 +82,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <doclint>all,-missing</doclint>
-                    <excludePackageNames>ai.typesafe.sdk.internal:ai.typesafe.sdk.internal.*</excludePackageNames>
+                    <excludePackageNames>io.github.kgonia.typesafe.internal:io.github.kgonia.typesafe.internal.*</excludePackageNames>
                 </configuration>
                 <executions>
                     <execution>
